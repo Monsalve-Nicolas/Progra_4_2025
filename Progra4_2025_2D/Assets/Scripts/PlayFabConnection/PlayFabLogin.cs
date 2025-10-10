@@ -8,7 +8,6 @@ using UnityEngine.UI;
 public class PlayFabLogin : MonoBehaviour
 {
     private Action<string,bool> OnFinishActionEvent;
-    [SerializeField] InputField inputField;
 
     void OnLoginSuccess(LoginResult result)
     {
@@ -38,17 +37,33 @@ public class PlayFabLogin : MonoBehaviour
         Debug.Log("Login Success");
     }
 
-    public void RegisterUser(string mail, string password, Action<string,bool> onFinishAction)
+    public void RegisterUser(string userName,string mail, string password, Action<string,bool> onFinishAction)
     {
         OnFinishActionEvent = onFinishAction;
         var request = new RegisterPlayFabUserRequest
         {
+            Username = userName,
             Email = mail,
-            Password = password,
+            Password = password,           
             RequireBothUsernameAndEmail = false
         };
         PlayFabClientAPI.RegisterPlayFabUser(request, OnRegisterUserResult, OnError);
     }
+    public void RecoveryAccount(string email,Action<string,bool> onFinishAction)
+    {
+        OnFinishActionEvent = onFinishAction;
+        var request = new SendAccountRecoveryEmailRequest
+        {
+            Email = email,
+        };
+        PlayFabClientAPI.SendAccountRecoveryEmail(request, OnRequestSuccess,OnError);
+    }
+
+    private void OnRequestSuccess(SendAccountRecoveryEmailResult result)
+    {
+        
+    }
+
     void OnError(PlayFabError error)
     {
         OnFinishActionEvent?.Invoke(error.GenerateErrorReport(), false);

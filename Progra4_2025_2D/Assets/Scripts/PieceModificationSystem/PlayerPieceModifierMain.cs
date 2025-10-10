@@ -21,6 +21,8 @@ public class PlayerPieceModifierMain : MonoBehaviour
     [SerializeField] List<TankPieceScriptable> tpiece_Towers;
     [SerializeField] List<TankPieceScriptable> tpiece_Tracks;
     [SerializeField] List<TankPieceScriptable> tpiece_Projectiles;
+
+    [Header("Unity Event")]
     public UnityEvent<TankPieceScriptable> OnTankPieceChangeEvent;
     public UnityEvent<string> playerNameChangeEvent;
     public UnityEvent<Color> OnTankPieceChangeColorEvent;
