@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
@@ -28,6 +29,9 @@ public class LoginManager : MonoBehaviour
     [SerializeField] TMP_InputField inputFieldMail;
     [SerializeField] TMP_InputField inputFieldPassword;
 
+    [Header("Listas")]
+    public List<LeaderBoardData> leaderBoard;
+
     private void Awake()
     {
         inputFieldMail.onValueChanged.AddListener(OnChangeUser);
@@ -42,11 +46,25 @@ public class LoginManager : MonoBehaviour
         if(Input.GetKeyDown(KeyCode.Keypad1))
         {
             SavePJData();
+            playfabLogin.AddDataToMaxScore(score, OnFinishAction);
         }
         if (Input.GetKeyDown(KeyCode.Keypad2))
         {
             LoadPJData();
+            LoadLeaderBoard();
         }
+        if (Input.GetKeyDown(KeyCode.Keypad3))
+        {
+            playfabLogin.SetDisplayName(user,OnFinishAction);
+        }
+    }
+    void LoadLeaderBoard()
+    {
+        playfabLogin.GetDataFromMaxScore(OnEndLoadLeaderBoard);
+    }
+    void OnEndLoadLeaderBoard(List<LeaderBoardData> data)
+    {
+        leaderBoard = data;
     }
     void SavePJData()
     {
@@ -103,7 +121,7 @@ public class LoginManager : MonoBehaviour
     public void OnLoginButton()
     {
         SetBlockPanel("Loading...", true);
-        playfabLogin.LoginUser(user, password, OnFinishAction);
+        playfabLogin.LoginUserName(user, password, OnFinishAction);
     }
     public void CreateAccountButton()
     {
@@ -172,4 +190,13 @@ public class PJData
 {
     public int score;
     public int lifePoints;
+}
+
+[System.Serializable]
+
+public class LeaderBoardData
+{
+    public string displayName;
+    public int score;
+    public int boardPos;
 }

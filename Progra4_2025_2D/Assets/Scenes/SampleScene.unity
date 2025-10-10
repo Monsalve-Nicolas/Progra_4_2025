@@ -412,6 +412,10 @@ MonoBehaviour:
   textFeedback: {fileID: 2030185761}
   inputFieldMail: {fileID: 849296976103979049, guid: 97660aa4ae69de642bb16da434331f57, type: 3}
   inputFieldPassword: {fileID: 849296976103979049, guid: 97660aa4ae69de642bb16da434331f57, type: 3}
+  leaderBoard:
+  - displayName: 
+    score: 0
+    boardPos: 0
 --- !u!4 &232104951
 Transform:
   m_ObjectHideFlags: 0

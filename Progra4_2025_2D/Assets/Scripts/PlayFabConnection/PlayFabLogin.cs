@@ -9,7 +9,8 @@ using UnityEngine.UI;
 public class PlayFabLogin : MonoBehaviour
 {
     private Action<string,bool> OnFinishActionEvent;
-    private Action<string, bool> OnFinishLoadEvent; 
+    private Action<string, bool> OnFinishLoadEvent;
+    private Action<List<LeaderBoardData>> leaderBoardEvent;
 
 
 
@@ -72,6 +73,17 @@ public class PlayFabLogin : MonoBehaviour
         };
         PlayFabClientAPI.LoginWithEmailAddress(request, OnLoginResult, OnError);
     }
+    public void LoginUserName(string userName, string password, Action<string, bool> onFinishAction)
+    {
+        OnFinishActionEvent = onFinishAction;
+        var request = new LoginWithPlayFabRequest
+        {
+            Username = userName,
+            Password = password
+        };
+
+        PlayFabClientAPI.LoginWithPlayFab(request, OnLoginSuccess, OnError);
+    }
     void OnLoginResult(LoginResult result)
     {
         OnFinishActionEvent?.Invoke("Success",true);
@@ -100,7 +112,72 @@ public class PlayFabLogin : MonoBehaviour
         };
         PlayFabClientAPI.SendAccountRecoveryEmail(request, OnRequestSuccess,OnError);
     }
+    public void AddDataToMaxScore(int score, Action<string,bool> onFinishAction)
+    {
+        OnFinishActionEvent = onFinishAction;
+        var request = new UpdatePlayerStatisticsRequest
+        {
+            Statistics = new List<StatisticUpdate>
+            {
+                new StatisticUpdate
+                {
+                    StatisticName = "MaxScore", // nombre de tu leaderboard
+                    Value = score
+                }
+            }
+        };
+        PlayFabClientAPI.UpdatePlayerStatistics(request, OnStatisticsResult, OnError);
+    }
+    public void GetDataFromMaxScore(Action<List<LeaderBoardData>> leaderBoard)
+    {
+        leaderBoardEvent = leaderBoard;
+        var request = new GetLeaderboardRequest
+        {
+            StatisticName = "MaxScore", // nombre de tu leaderboard
+            StartPosition = 0,             // posición inicial (0 = primer lugar)
+            MaxResultsCount = 10           // cantidad máxima de resultados
+        };
+        PlayFabClientAPI.GetLeaderboard(request, OnLeaderBoardLoad, OnError);
+    }
+    private void OnLeaderBoardLoad(GetLeaderboardResult result)
+    {
+        List<LeaderBoardData> dataList = new List<LeaderBoardData>();
+        foreach (var item in result.Leaderboard)
+        {
+            LeaderBoardData newData = new LeaderBoardData()
+            {
+                displayName = item.DisplayName,
+                score = item.StatValue,
+                boardPos = item.Position
+            };
+            dataList.Add(newData);
+        }
+        leaderBoardEvent?.Invoke(dataList);
+    }
 
+    public void SetDisplayName(string displayName, Action<string, bool> onFinishAction)
+    {
+        OnFinishActionEvent = onFinishAction;
+        var request = new UpdateUserTitleDisplayNameRequest
+        {
+            DisplayName = displayName,
+        };
+        PlayFabClientAPI.UpdateUserTitleDisplayName(request, OnEndRequestDisplayName, OnError);
+    }
+
+    private void OnEndRequestDisplayName(UpdateUserTitleDisplayNameResult result)
+    {
+        Debug.Log("Success");
+        OnFinishLoadEvent?.Invoke("Success", true);
+        OnFinishLoadEvent = null;
+    }
+
+    private void OnStatisticsResult(UpdatePlayerStatisticsResult result)
+    {
+        Debug.Log("Success");
+        OnFinishLoadEvent?.Invoke("Success", true);
+        OnFinishLoadEvent = null;
+    }
     private void OnRequestSuccess(SendAccountRecoveryEmailResult result)
     {
         Debug.Log("Correo de recuperacion envaido");
