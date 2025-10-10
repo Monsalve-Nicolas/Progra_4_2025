@@ -14,6 +14,8 @@ public class LoginManager : MonoBehaviour
     public string mail;
     public string password;
     public string repetirPassword;
+    public int score;
+    public int lifePoints;
 
     [Header("Objetos")]
     [SerializeField] GameObject blockPanel;
@@ -26,7 +28,6 @@ public class LoginManager : MonoBehaviour
     [SerializeField] TMP_InputField inputFieldMail;
     [SerializeField] TMP_InputField inputFieldPassword;
 
-
     private void Awake()
     {
         inputFieldMail.onValueChanged.AddListener(OnChangeUser);
@@ -35,7 +36,47 @@ public class LoginManager : MonoBehaviour
     private void Start()
     {
         SetPanel(LoginPanelType.Login);
-        playfabLogin.LoginUser(mail, password,OnFinishAction);
+    }
+    private void Update()
+    {
+        if(Input.GetKeyDown(KeyCode.Keypad1))
+        {
+            SavePJData();
+        }
+        if (Input.GetKeyDown(KeyCode.Keypad2))
+        {
+            LoadPJData();
+        }
+    }
+    void SavePJData()
+    {
+        PJData pJData = new PJData()
+        {
+            score = score,
+            lifePoints = lifePoints,
+        };
+        string json = JsonUtility.ToJson(pJData);
+        SetBlockPanel("Saving data, not close the app", true);
+        playfabLogin.SaveDataInfo(json, "PjInfo", OnFinishAction);
+    }
+    void LoadPJData()
+    {
+        SetBlockPanel("Loading data, not close the app", true);
+        playfabLogin.LoadDataInfo("PjInfo", OnLoadData); 
+    }
+    void OnLoadData(string json,bool success)
+    {
+        if(success)
+        {
+            PJData pJData = JsonUtility.FromJson<PJData>(json);
+            score = pJData.score;
+            lifePoints = pJData.lifePoints;
+            SetBlockPanel("Load Success", false);
+        }
+        else
+        {
+            SetBlockPanel("Sucedio un error en la carga de datos", true);
+        }
     }
     void SetBlockPanel(string message, bool enable)
     {
@@ -68,6 +109,14 @@ public class LoginManager : MonoBehaviour
     {
         SetPanel(LoginPanelType.Register);
     }
+    public void BackButton()
+    {
+        SetPanel(LoginPanelType.Login);
+    }
+    public void RecoveryButtonAccess()
+    {
+        SetPanel(LoginPanelType.Recovery);
+    }
     public void CreateAccountCreateButton()
     {
         if(password == repetirPassword)
@@ -81,6 +130,11 @@ public class LoginManager : MonoBehaviour
             Debug.Log("Las claves deben coincidir");
         }
         
+    }
+    public void RecoveryButton()
+    {
+        SetBlockPanel("Enviando correo de recuperacion..",true);
+        playfabLogin.RecoveryAccount(mail,OnFinishAction);
     }
     void OnFinishAction(string message, bool result)
     {
@@ -110,4 +164,12 @@ public enum LoginPanelType
     Login,
     Register,
     Recovery
+}
+
+[System.Serializable]
+
+public class PJData
+{
+    public int score;
+    public int lifePoints;
 }

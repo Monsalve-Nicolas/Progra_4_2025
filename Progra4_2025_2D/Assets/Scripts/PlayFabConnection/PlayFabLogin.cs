@@ -2,12 +2,53 @@ using System;
 using PlayFab;
 using PlayFab.ClientModels;
 using UnityEngine;
+using System.Collections.Generic;
 using UnityEngine.Events;
 using UnityEngine.UI;
 
 public class PlayFabLogin : MonoBehaviour
 {
     private Action<string,bool> OnFinishActionEvent;
+    private Action<string, bool> OnFinishLoadEvent; 
+
+
+
+    public void SaveDataInfo(string data,string datakey,Action<string,bool> OnFinishLoad)
+    {
+         OnFinishLoadEvent = OnFinishLoad;
+        var request = new UpdateUserDataRequest
+        {
+            Data = new Dictionary<string, string>
+            {
+                {datakey, data},
+            },
+        };
+        PlayFabClientAPI.UpdateUserData(request, OnDataSave, OnError);
+    }
+    public void LoadDataInfo(string datakey, Action<string,bool> OnFinishLoad)
+    {
+        OnFinishLoadEvent = OnFinishLoad;
+        var request = new GetUserDataRequest();
+        PlayFabClientAPI.GetUserData(request, result =>
+        {
+            if (result.Data != null && result.Data.ContainsKey(datakey))
+            {
+                string data = result.Data[datakey].Value;
+                OnFinishLoadEvent?.Invoke(data, true);
+            }
+            else
+            {
+                Debug.Log("Not Key Found");
+                OnFinishLoadEvent?.Invoke(default, false);
+            }
+        }, OnError);
+    }
+    public void OnDataSave(UpdateUserDataResult result)
+    {
+        Debug.Log("Success");
+        OnFinishLoadEvent?.Invoke("Success", true);
+        OnFinishLoadEvent = null;
+    }
 
     void OnLoginSuccess(LoginResult result)
     {
@@ -55,13 +96,15 @@ public class PlayFabLogin : MonoBehaviour
         var request = new SendAccountRecoveryEmailRequest
         {
             Email = email,
+            TitleId = PlayFabSettings.staticSettings.TitleId,
         };
         PlayFabClientAPI.SendAccountRecoveryEmail(request, OnRequestSuccess,OnError);
     }
 
     private void OnRequestSuccess(SendAccountRecoveryEmailResult result)
     {
-        
+        Debug.Log("Correo de recuperacion envaido");
+        OnFinishActionEvent?.Invoke("Correo de recuperacion envaido", true);
     }
 
     void OnError(PlayFabError error)
@@ -79,7 +122,7 @@ public class PlayFabLogin : MonoBehaviour
         OnFinishActionEvent = onFinishAction;
         if (string.IsNullOrEmpty(PlayFabSettings.staticSettings.TitleId))
         {
-            PlayFabSettings.staticSettings.TitleId = "146940";
+            PlayFabSettings.staticSettings.TitleId = "68515";
         }
         var request = new LoginWithCustomIDRequest
         {
