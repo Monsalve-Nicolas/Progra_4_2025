@@ -14,7 +14,8 @@ public class LoginManager : MonoBehaviour
     public string user;
     public string mail;
     public string password;
-    public string repetirPassword;
+    public string repeatPassword;
+    public string displayName;
     public int score;
     public int lifePoints;
 
@@ -25,18 +26,18 @@ public class LoginManager : MonoBehaviour
     [Header("Textos")] 
     [SerializeField] TMPro.TextMeshProUGUI textFeedback;
 
-    [Header("Input Field")]
-    [SerializeField] TMP_InputField inputFieldMail;
-    [SerializeField] TMP_InputField inputFieldPassword;
+    //[Header("Input Field")]
+    //[SerializeField] TMP_InputField inputFieldMail;
+    //[SerializeField] TMP_InputField inputFieldPassword;
 
     [Header("Listas")]
     public List<LeaderBoardData> leaderBoard;
 
-    private void Awake()
-    {
-        inputFieldMail.onValueChanged.AddListener(OnChangeUser);
-        inputFieldPassword.onValueChanged.AddListener(OnChangePass);
-    }
+    //private void Awake()
+    //{
+    //    inputFieldMail.onValueChanged.AddListener(OnChangeUser);
+    //    inputFieldPassword.onValueChanged.AddListener(OnChangePass);
+    //}
     private void Start()
     {
         SetPanel(LoginPanelType.Login);
@@ -55,7 +56,8 @@ public class LoginManager : MonoBehaviour
         }
         if (Input.GetKeyDown(KeyCode.Keypad3))
         {
-            playfabLogin.SetDisplayName(user,OnFinishAction);
+           
+            playfabLogin.SetDisplayName(displayName,OnFinishAction);
         }
     }
     void LoadLeaderBoard()
@@ -86,9 +88,9 @@ public class LoginManager : MonoBehaviour
     {
         if(success)
         {
-            PJData pJData = JsonUtility.FromJson<PJData>(json);
-            score = pJData.score;
-            lifePoints = pJData.lifePoints;
+            PJData pjData = JsonUtility.FromJson<PJData>(json);
+            score = pjData.score;
+            lifePoints = pjData.lifePoints;
             SetBlockPanel("Load Success", false);
         }
         else
@@ -116,7 +118,7 @@ public class LoginManager : MonoBehaviour
     }
     public void OnChangeRepeatPassword(string val)
     {
-        repetirPassword = val;
+        repeatPassword = val;
     }
     public void OnLoginButton()
     {
@@ -137,7 +139,7 @@ public class LoginManager : MonoBehaviour
     }
     public void CreateAccountCreateButton()
     {
-        if(password == repetirPassword)
+        if(password == repeatPassword)
         {
             SetBlockPanel("Creating...", true);
             playfabLogin.LoginAnonimo(null);
