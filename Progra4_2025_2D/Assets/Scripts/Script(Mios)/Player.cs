@@ -152,8 +152,13 @@ public class Player : MonoBehaviour
         //inicializando el load save
         LoadSaveSystem loadSave = new LoadSaveSystem();
         //obtengo la data
-        PlayerDataInfo playerData = loadSave.LoadPlayerInfo();
+        loadSave.LoadPlayerInfo(OnEndLoadData);
 
+        
+    }
+
+    void OnEndLoadData(PlayerDataInfo playerData)
+    {
         //actualizo player con data obtenida
         playerName = playerData.playerName;
         currentDmg = playerData.currentDmg;
@@ -180,6 +185,7 @@ public class Player : MonoBehaviour
         }
         UpdateControllerWithTankPiece();
     }
+
     public void SaveData()
     {
         PlayerDataInfo playerData = new PlayerDataInfo();
@@ -194,6 +200,11 @@ public class Player : MonoBehaviour
             playerData.piecesNames.Add(piecesArr[i].id);
         }
         LoadSaveSystem loadSave = new LoadSaveSystem();
-        loadSave.SavePlayerInfo(playerData);
+        loadSave.SavePlayerInfo(playerData,OnEndSave);
+    }
+
+    private void OnEndSave(string arg1, bool arg2)
+    {
+       
     }
 }

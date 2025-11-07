@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class LoginManager : MonoBehaviour
 {
-    [Header("Clases referentes")]
-    [SerializeField] PlayFabLogin playfabLogin;
+    
+    PlayFabManager playfabLogin = new PlayFabManager();
 
     [Header("Variables")]
     public string user;
@@ -32,6 +33,7 @@ public class LoginManager : MonoBehaviour
 
     [Header("Listas")]
     public List<LeaderBoardData> leaderBoard;
+    LoginPanelType currentPanel;
 
     //private void Awake()
     //{
@@ -42,62 +44,62 @@ public class LoginManager : MonoBehaviour
     {
         SetPanel(LoginPanelType.Login);
     }
-    private void Update()
-    {
-        if(Input.GetKeyDown(KeyCode.Keypad1))
-        {
-            SavePJData();
-            playfabLogin.AddDataToMaxScore(score, OnFinishAction);
-        }
-        if (Input.GetKeyDown(KeyCode.Keypad2))
-        {
-            LoadPJData();
-            LoadLeaderBoard();
-        }
-        if (Input.GetKeyDown(KeyCode.Keypad3))
-        {
+    //private void Update()
+    //{
+    //    if(Input.GetKeyDown(KeyCode.Keypad1))
+    //    {
+    //        SavePJData();
+    //        playfabLogin.AddDataToMaxScore(score, OnFinishAction);
+    //    }
+    //    if (Input.GetKeyDown(KeyCode.Keypad2))
+    //    {
+    //        LoadPJData();
+    //        LoadLeaderBoard();
+    //    }
+    //    if (Input.GetKeyDown(KeyCode.Keypad3))
+    //    {
            
-            playfabLogin.SetDisplayName(displayName,OnFinishAction);
-        }
-    }
-    void LoadLeaderBoard()
-    {
-        playfabLogin.GetDataFromMaxScore(OnEndLoadLeaderBoard);
-    }
-    void OnEndLoadLeaderBoard(List<LeaderBoardData> data)
-    {
-        leaderBoard = data;
-    }
-    void SavePJData()
-    {
-        PJData pJData = new PJData()
-        {
-            score = score,
-            lifePoints = lifePoints,
-        };
-        string json = JsonUtility.ToJson(pJData);
-        SetBlockPanel("Saving data, not close the app", true);
-        playfabLogin.SaveDataInfo(json, "PjInfo", OnFinishAction);
-    }
-    void LoadPJData()
-    {
-        SetBlockPanel("Loading data, not close the app", true);
-        playfabLogin.LoadDataInfo("PjInfo", OnLoadData); 
-    }
-    void OnLoadData(string json,bool success)
-    {
-        if(success)
-        {
-            PJData pjData = JsonUtility.FromJson<PJData>(json);
-            score = pjData.score;
-            lifePoints = pjData.lifePoints;
-            SetBlockPanel("Load Success", false);
-        }
-        else
-        {
-            SetBlockPanel("Sucedio un error en la carga de datos", true);
-        }
-    }
+    //        playfabLogin.SetDisplayName(displayName,OnFinishAction);
+    //    }
+    //}
+    //void LoadLeaderBoard()
+    //{
+    //    playfabLogin.GetDataFromMaxScore(OnEndLoadLeaderBoard);
+    //}
+    //void OnEndLoadLeaderBoard(List<LeaderBoardData> data)
+    //{
+    //    leaderBoard = data;
+    //}
+    //void SavePJData()
+    //{
+    //    PJData pJData = new PJData()
+    //    {
+    //        score = score,
+    //        lifePoints = lifePoints,
+    //    };
+    //    string json = JsonUtility.ToJson(pJData);
+    //    SetBlockPanel("Saving data, not close the app", true);
+    //    playfabLogin.SaveDataInfo(json, "PjInfo", OnFinishAction);
+    //}
+    //void LoadPJData()
+    //{
+    //    SetBlockPanel("Loading data, not close the app", true);
+    //    playfabLogin.LoadDataInfo("PjInfo", OnLoadData); 
+    //}
+    //void OnLoadData(string json,bool success)
+    //{
+    //    if(success)
+    //    {
+    //        PJData pjData = JsonUtility.FromJson<PJData>(json);
+    //        score = pjData.score;
+    //        lifePoints = pjData.lifePoints;
+    //        SetBlockPanel("Load Success", false);
+    //    }
+    //    else
+    //    {
+    //        SetBlockPanel("Sucedio un error en la carga de datos", true);
+    //    }
+    //}
     void SetBlockPanel(string message, bool enable)
     {
         
@@ -161,6 +163,21 @@ public class LoginManager : MonoBehaviour
         if(result == true)
         {
             SetBlockPanel(message, false);
+            switch (currentPanel)
+            {
+                case LoginPanelType.Login:
+                    SceneManager.LoadScene(1);
+                    break;
+                case LoginPanelType.Register:
+                    SceneManager.LoadScene(1);
+                    break;
+                case LoginPanelType.Recovery:
+                    SetPanel(LoginPanelType.Login);
+                    break;
+                default:
+                    break;
+            }
+
         }
         else
         {
@@ -177,6 +194,7 @@ public class LoginManager : MonoBehaviour
             }
             else panels[i].SetActive(false);
         }
+        currentPanel = panelType;
     }
 }
 public enum LoginPanelType
@@ -186,19 +204,10 @@ public enum LoginPanelType
     Recovery
 }
 
-[System.Serializable]
+//[System.Serializable]
 
-public class PJData
-{
-    public int score;
-    public int lifePoints;
-}
-
-[System.Serializable]
-
-public class LeaderBoardData
-{
-    public string displayName;
-    public int score;
-    public int boardPos;
-}
+//public class PJData
+//{
+//    public int score;
+//    public int lifePoints;
+//}

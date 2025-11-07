@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using UnityEngine.Events;
 using UnityEngine.UI;
 
-public class PlayFabLogin : MonoBehaviour
+public class PlayFabManager
 {
     private Action<string,bool> OnFinishActionEvent;
     private Action<string, bool> OnFinishLoadEvent;
