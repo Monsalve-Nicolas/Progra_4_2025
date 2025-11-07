@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class EnemyTank : MonoBehaviour
+public class EnemyTower : MonoBehaviour
 {
     [Header("Configuración de la torreta")]
     public float radioApuntar = 10f;

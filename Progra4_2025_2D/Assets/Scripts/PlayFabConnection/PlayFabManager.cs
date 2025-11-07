@@ -9,14 +9,13 @@ using UnityEngine.UI;
 public class PlayFabManager
 {
     private Action<string,bool> OnFinishActionEvent;
-    private Action<string, bool> OnFinishLoadEvent;
     private Action<List<LeaderBoardData>> leaderBoardEvent;
 
 
 
     public void SaveDataInfo(string data,string datakey,Action<string,bool> OnFinishLoad)
     {
-         OnFinishLoadEvent = OnFinishLoad;
+        OnFinishActionEvent = OnFinishLoad;
         var request = new UpdateUserDataRequest
         {
             Data = new Dictionary<string, string>
@@ -28,27 +27,27 @@ public class PlayFabManager
     }
     public void LoadDataInfo(string datakey, Action<string,bool> OnFinishLoad)
     {
-        OnFinishLoadEvent = OnFinishLoad;
+        OnFinishActionEvent = OnFinishLoad;
         var request = new GetUserDataRequest();
         PlayFabClientAPI.GetUserData(request, result =>
         {
             if (result.Data != null && result.Data.ContainsKey(datakey))
             {
                 string data = result.Data[datakey].Value;
-                OnFinishLoadEvent?.Invoke(data, true);
+                OnFinishActionEvent?.Invoke(data, true);
             }
             else
             {
                 Debug.Log("Not Key Found");
-                OnFinishLoadEvent?.Invoke(default, false);
+                OnFinishActionEvent?.Invoke(default, false);
             }
         }, OnError);
     }
     public void OnDataSave(UpdateUserDataResult result)
     {
         Debug.Log("Success");
-        OnFinishLoadEvent?.Invoke("Success", true);
-        OnFinishLoadEvent = null;
+        OnFinishActionEvent?.Invoke("Success", true);
+        OnFinishActionEvent = null;
     }
 
     void OnLoginSuccess(LoginResult result)
@@ -97,7 +96,8 @@ public class PlayFabManager
         {
             Username = userName,
             Email = mail,
-            Password = password,           
+            Password = password,     
+            DisplayName = userName,
             RequireBothUsernameAndEmail = false
         };
         PlayFabClientAPI.RegisterPlayFabUser(request, OnRegisterUserResult, OnError);
@@ -168,15 +168,15 @@ public class PlayFabManager
     private void OnEndRequestDisplayName(UpdateUserTitleDisplayNameResult result)
     {
         Debug.Log("Success");
-        OnFinishLoadEvent?.Invoke("Success", true);
-        OnFinishLoadEvent = null;
+        OnFinishActionEvent?.Invoke("Success", true);
+        OnFinishActionEvent = null;
     }
 
     private void OnStatisticsResult(UpdatePlayerStatisticsResult result)
     {
         Debug.Log("Success");
-        OnFinishLoadEvent?.Invoke("Success", true);
-        OnFinishLoadEvent = null;
+        OnFinishActionEvent?.Invoke("Success", true);
+        OnFinishActionEvent = null;
     }
     private void OnRequestSuccess(SendAccountRecoveryEmailResult result)
     {

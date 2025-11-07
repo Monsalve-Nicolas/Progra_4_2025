@@ -9,7 +9,7 @@ public class LeaderBoardContent : MonoBehaviour
     public void SetLeaderBoardContent(LeaderBoardData leaderBoardData)
     {
         text_DisplayName.text = leaderBoardData.displayName;
-        text_Number.text = leaderBoardData.boardPos.ToString();
+        text_Number.text = (leaderBoardData.boardPos +1).ToString();
         text_Points.text = leaderBoardData.score.ToString();
     }
 }

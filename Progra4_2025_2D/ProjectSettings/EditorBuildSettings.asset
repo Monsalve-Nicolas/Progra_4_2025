@@ -11,6 +11,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Scene_TankMod.unity
     guid: 3050ba3d5f9c8a4429235212eec9f502
+  - enabled: 1
+    path: Assets/Scenes/LeaderBoard.unity
+    guid: 8142d452f212cec47975ce040d6ff9d1
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   m_UseUCBPForAssetBundles: 0
