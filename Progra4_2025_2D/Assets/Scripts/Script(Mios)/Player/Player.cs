@@ -4,7 +4,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class Player : MonoBehaviour
+public class Player : MonoBehaviour, IHealth
 {
     [Header("Input System")]
     [SerializeField] InputActionAsset action;
@@ -40,6 +40,9 @@ public class Player : MonoBehaviour
     //[SerializeField] TMP_InputField inputField;
     public TMPro.TextMeshProUGUI textPlayerName;
 
+    [Header("Vida")]
+    public int maxHealth = 100;
+    int currentHealth;
     private void OnEnable()
     {
         action.FindActionMap("UI").Enable();
@@ -57,6 +60,7 @@ public class Player : MonoBehaviour
     }
     private void Start()
     {
+        currentHealth = maxHealth;
         UpdateControllerWithTankPiece();
         LoadData();
     }
@@ -206,5 +210,19 @@ public class Player : MonoBehaviour
     private void OnEndSave(string arg1, bool arg2)
     {
        
+    }
+
+    public void TakeDamage(int amount)
+    {
+        currentHealth -= amount;
+        if (currentHealth <= 0)
+        {
+            Debug.Log("Player Murio");
+            Die();
+        }
+    }
+    public void Die()
+    {
+        LevelManager.Instance.OnPlayerDie();
     }
 }
