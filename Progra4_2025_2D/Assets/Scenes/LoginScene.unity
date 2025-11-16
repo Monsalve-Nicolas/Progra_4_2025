@@ -4872,6 +4872,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: CreateAccountButton
       objectReference: {fileID: 0}
+    - target: {fileID: 1453852002476214577, guid: e4fc3e40c33a05f4ca369c59d66f0f92, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4232202066896405984, guid: e4fc3e40c33a05f4ca369c59d66f0f92, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
       value: 1

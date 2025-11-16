@@ -15,7 +15,7 @@ public class LeaderBoardManager : MonoBehaviour
     }
     IEnumerator LoadLeaderBoardCorrutine()
     {
-        yield return new WaitForSeconds(1);
+        yield return new WaitForSeconds(2);
         LoadleaderBoard();
     }
     //desde aqui esto va cuando el jugador termina el nivel o gameover

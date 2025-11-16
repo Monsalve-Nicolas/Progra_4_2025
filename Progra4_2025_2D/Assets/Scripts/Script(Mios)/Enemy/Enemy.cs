@@ -18,8 +18,6 @@ public class Enemy : MonoBehaviour, IHealth
     void Start()
     {
         currentHealth = maxHealth;
-        
-        
     }
     public void TakeDamage(int amount)
     {
@@ -27,14 +25,12 @@ public class Enemy : MonoBehaviour, IHealth
         if (currentHealth <= 0)
         {
             Die();
-        }
-        
+        }  
     }
     public void Die()
     {
         if (CompareTag("Enemy"))
         {
-
             Debug.Log("Le pegue");
             int puntos = Random.Range(minPoints, maxPoints + 1);
             LevelManager.Instance.AddPoints(puntos);
