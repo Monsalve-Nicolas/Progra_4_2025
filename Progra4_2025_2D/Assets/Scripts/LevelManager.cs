@@ -20,6 +20,7 @@ public class LevelManager : MonoBehaviour
     public void OnPlayerDie()
     {
         scoreManager.SaveDataToLeaderBoard(OnEndSave);
+        AnalyticsManager.Instance.ScoreAfterDie(scoreManager.score);
     }
 
     private void OnEndSave(string arg1, bool arg2)

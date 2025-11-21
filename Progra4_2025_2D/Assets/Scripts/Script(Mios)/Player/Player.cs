@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -84,7 +85,6 @@ public class Player : MonoBehaviour, IHealth
     public void OnTankPieceChange(TankPieceScriptable tankPiece)
     {
         piecesArr[(int)tankPiece.pieceType] = tankPiece;
-
         Debug.Log("Pieza modificada = " + tankPiece.pieceType);
         Debug.Log("El ID = " + tankPiece.id);
         UpdateControllerWithTankPiece();
@@ -192,6 +192,7 @@ public class Player : MonoBehaviour, IHealth
 
     public void SaveData()
     {
+        AnalyticsManager.Instance.MostUsedPiece(piecesArr.ToList());
         PlayerDataInfo playerData = new PlayerDataInfo();
         TankPieceScriptable pieceS = new TankPieceScriptable();
         playerData.piecesNames = new List<string>();
@@ -223,6 +224,7 @@ public class Player : MonoBehaviour, IHealth
     }
     public void Die()
     {
+        
         LevelManager.Instance.OnPlayerDie();
     }
 }
