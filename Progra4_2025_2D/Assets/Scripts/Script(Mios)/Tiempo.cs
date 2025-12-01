@@ -5,7 +5,7 @@ using UnityEngine;
 public class Tiempo : MonoBehaviour
 {
     [SerializeField] TextMeshProUGUI timerText;
-    [SerializeField] float currentTimer;
+    [SerializeField] public float currentTimer;
     int minutos, segundos;
 
     private void Start()

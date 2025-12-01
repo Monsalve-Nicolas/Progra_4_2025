@@ -16,7 +16,7 @@ public class ScoreManager : MonoBehaviour
     {
         if(scoreText != null)
         {
-            scoreText.text = "Puntos:" + score;
+            scoreText.text = score.ToString("00000");
         }
     }
     public void SaveDataToLeaderBoard(Action<string,bool> onEndSave)//esto va en mi sistema de score

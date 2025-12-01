@@ -124,7 +124,7 @@ public class LoginManager : MonoBehaviour
     }
     public void OnLoginButton()
     {
-        SetBlockPanel("Loading...", true);
+        SetBlockPanel("Loading..., Porfavor no cerrar el panel", true);
         playfabLogin.LoginUserName(user, password, OnFinishAction);
     }
     public void CreateAccountButton()
@@ -134,6 +134,7 @@ public class LoginManager : MonoBehaviour
     public void BackButton()
     {
         SetPanel(LoginPanelType.Login);
+        blockPanel.SetActive(false);
     }
     public void RecoveryButtonAccess()
     {
@@ -143,7 +144,7 @@ public class LoginManager : MonoBehaviour
     {
         if(password == repeatPassword)
         {
-            SetBlockPanel("Creating...", true);
+            SetBlockPanel("Creating...,Porfavor de no cerrar el panel", true);
             playfabLogin.LoginAnonimo(null);
             playfabLogin.RegisterUser(user, mail, password, OnFinishAction);
         }

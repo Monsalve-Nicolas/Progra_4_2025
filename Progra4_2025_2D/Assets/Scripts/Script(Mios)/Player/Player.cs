@@ -16,6 +16,7 @@ public class Player : MonoBehaviour, IHealth
     [SerializeField] public Movement movement;
     [SerializeField] public Turret turret;
     [SerializeField] public AttackTurret attackTurret;
+    [SerializeField] public Tiempo tiempo;
 
     [Header("Sprite")]
     [SerializeField] TankSpriteModifier spriteModifier;

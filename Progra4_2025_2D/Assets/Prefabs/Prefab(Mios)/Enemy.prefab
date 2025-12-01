@@ -901,8 +901,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5243ed96dfae8347bc658805a95379a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  radioApuntar: 10
-  radioAtaque: 9
+  radioApuntar: 12
+  radioAtaque: 12
   tiempoEntreDisparos: 1
   powerBullet: 7
   spawnBullet: {fileID: 5120626671235902553}

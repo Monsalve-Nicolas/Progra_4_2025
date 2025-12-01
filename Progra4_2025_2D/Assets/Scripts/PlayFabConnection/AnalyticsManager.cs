@@ -75,16 +75,20 @@ public class AnalyticsManager : MonoBehaviour
 
     public void EnemyAllDie(int enemiesCount, float time)
     {
+        Debug.Log("Se esta mandando el EnemyAllDie");
         if (isInitialized)
         {
+            Debug.Log("Se esta mandando el EnemyAllDieEvent");
             EnemyAllDieEvent enemyAllDieEvent = new EnemyAllDieEvent()
             {
                 EAD_enemiesCount = enemiesCount,
                 EAD_time = time
             };
             AnalyticsService.Instance.RecordEvent(enemyAllDieEvent);
+            AnalyticsService.Instance.Flush();
+            Debug.Log("Estoy saliendo EnemyAllDieEvent");
         }
-       
+        Debug.Log("Estoy saliendo de EnemyAllDie");
     }
     //public void GameDefeat(string reason,float time)
     //{
@@ -102,17 +106,30 @@ public class AnalyticsManager : MonoBehaviour
                 SAD_score = score
             };
             AnalyticsService.Instance.RecordEvent(scoreAfterDieEvent);
-            AnalyticsService.Instance.Flush();
         }
     }
-    public void UsedRoute()
+    public void PlayerDiePos(float time,Vector3 pos)
     {
-
+        if (isInitialized)
+        {
+            PlayerDiePosEvent playerDiePosEvent = new PlayerDiePosEvent()
+            {
+                PDP_time = time,
+                PDP_PosX = pos.x,
+                PDP_PosY = pos.y,
+                PDP_PosZ = pos.z
+            };
+            AnalyticsService.Instance.RecordEvent(playerDiePosEvent);
+        }
     }
     public void MostUsedPiece(List<TankPieceScriptable> piecesList)
     {
         foreach (var item in piecesList)
         {
+            if (item == null)
+            {
+                continue;
+            }
             string id = item.id;
 
             MostUsedPieceEvent mostUsedPieceEvent = new MostUsedPieceEvent()

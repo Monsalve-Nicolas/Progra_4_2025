@@ -17,6 +17,7 @@ public class CanvasAnimation : MonoBehaviour
     private void Start()
     {
         //StartCoroutine(ShowPointsCoroutine(111));
+        StartCoroutine(AnimPanelCoroutineConCurva());
     }
 
     private void Update()

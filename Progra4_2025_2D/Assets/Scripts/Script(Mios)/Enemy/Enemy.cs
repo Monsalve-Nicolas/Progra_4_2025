@@ -34,6 +34,8 @@ public class Enemy : MonoBehaviour, IHealth
             Debug.Log("Le pegue");
             int puntos = Random.Range(minPoints, maxPoints + 1);
             LevelManager.Instance.AddPoints(puntos);
+            
+            LevelManager.Instance.OnEnemyDie();
         }
         Destroy(gameObject);
     }

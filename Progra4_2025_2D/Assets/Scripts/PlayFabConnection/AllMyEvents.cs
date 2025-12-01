@@ -36,6 +36,18 @@ public class EnemyAllDieEvent : Event
     public float EAD_time { set { SetParameter("EAD_time", value); } }
 
 }
+public class PlayerDiePosEvent : Event
+{
+    //al constructor le ponemos el mismo tipo que la clase
+    public PlayerDiePosEvent() : base("playerDiePos")//base("siempre va el nombre del evento igual que el dasboard")
+    {
+    }
+    //aca abajo vamos a poner las mismas variables que nuestro evento en el dashboard
+    public float PDP_time { set { SetParameter("PDP_time", value); } }
+    public float PDP_PosX { set { SetParameter("PDP_PosX", value); } }
+    public float PDP_PosY { set { SetParameter("PDP_PosY", value); } }
+    public float PDP_PosZ { set { SetParameter("PDP_PosZ", value); } }
+}
 public class ScoreAfterDieEvent : Event
 {
     //al constructor le ponemos el mismo tipo que la clase
